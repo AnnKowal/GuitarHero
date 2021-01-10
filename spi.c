@@ -1,14 +1,12 @@
-#include "MKL05Z4.h"
-#include "tpm.c"
-void delayMs (int n);
-void spi_init(void);
-void spi_write(const unsigned char bitmap[]);
+#include "spi.h"
+
+
 
 void delayMs(int n)
 {
-    int i, j;
+    volatile int i, j;
     for(i = 0 ; i < n; i++)
-        for(j = 0; j < 1000; j++)
+        for(j = 0; j < 3500; j++)
             {}  
 }
 void spi_init(void)
@@ -20,60 +18,51 @@ void spi_init(void)
 	PORTB->PCR[0] = PORT_PCR_MUX(3); ///SCK
 	PORTA->PCR[7] = PORT_PCR_MUX(3); ///MOSI
 	SPI0->C1 = SPI_C1_MSTR_MASK;//set as master
-	SPI0->BR = 0x60; // baud rate = 1,3 MHz
+	SPI0->BR = 0x70; // baud rate = 1,3 MHz
   SPI0->C1 |= SPI_C1_SPE_MASK; // spi system enabled
 	
-	PORTB->PCR[11] = PORT_PCR_MUX(1);//SCE
-	PORTB->PCR[10] = PORT_PCR_MUX(1);//RST
-	PORTB->PCR[7] = PORT_PCR_MUX(1);// D/C
-	PTB->PDDR |= (1<<11) | (1<<10) | (1<<7); // set SCE, RST and D/C as outputs
-	PTB->PSOR = (1<<10) | (1<<7) | (1<<11); // RST, SCE: set high, active as low; D/C: select data mode
+	PORTB->PCR[SCE] = PORT_PCR_MUX(1);//SCE
+	PORTB->PCR[RST] = PORT_PCR_MUX(1);//RST
+	PORTB->PCR[D_C] = PORT_PCR_MUX(1);// D/C
+	PTB->PDDR |= (1<<SCE) | (1<<RST) | (1<<D_C); // set SCE, RST and D/C as outputs
+	PTB->PSOR = (1<<SCE) | (1<<RST) | (1<<D_C); // RST, SCE: set high, active as low; D/C: select data mode
 
 
-	PTB->PCOR |= (1<<10); // turn on RST 
-	delayMs(1);///more if not enough
-	PTB->PSOR |= (1<<10) ; // turn off RST
-	PTB->PCOR |= (1<<7); // set command mode
-	PTB->PCOR |= (1<<11); // enable Chip Select
+	PTB->PCOR |= (1<<RST); // turn on RST 
+	delayMs(100);///more if not enough
+	PTB->PSOR |= (1<<RST) ; // turn off RST
+	delayMs(100);
+	PTB->PCOR |= (1<<D_C); // set command mode
+	delayMs(1);
+	spi_write(0x21);
+	spi_write(0xBF); ///////////////////////////contrast
+	spi_write(0x04);//temperature coefficient
+	spi_write(0x14);
+	spi_write(0x20);//normal instruction set
+	spi_write(0x0D); // inverse mode
+	spi_write(0x0C);//display control - set normal mode
 	
-	while(!(SPI0->S & 0x20)){} //wait until buffer not empty
-		SPI0->D = 0x21;
-	while(!(SPI0->S & 0x80)){}
-		PTB->PSOR |= (1<<11);
-PTB->PCOR |= (1<<11);		
-		while(!(SPI0->S & 0x20)){} //wait until buffer not empty
-		SPI0->D = 0x90;//////////////////////
-	while(!(SPI0->S & 0x80)){}
-		PTB->PSOR |= (1<<11);	
-		PTB->PCOR |= (1<<11);
-		while(!(SPI0->S & 0x20)){} //wait until buffer not empty
-		SPI0->D = 0x20;
-	while(!(SPI0->S & 0x80)){}
-		PTB->PSOR |= (1<<11);
-
-
-PTB->PCOR |= (1<<11);		
-		while(!(SPI0->S & 0x20)){} //wait until buffer not empty
-		SPI0->D = 0x0C;
-	while(!(SPI0->S & 0x80)){}
-		PTB->PSOR |= (1<<11);	
-		PTB->PCOR |= (1<<11);		
-		while(!(SPI0->S & 0x20)){} //wait until buffer not empty
-		SPI0->D = 0x0D;
-	while(!(SPI0->S & 0x80)){}
-		PTB->PSOR |= (1<<11);	
 }
 
-void spi_write(const unsigned char bitmap[])
+void spi_write_data(const unsigned char bitmap[])
 {
-	PTB->PSOR |= (1<<7); // select data mode
-
-	PTB->PCOR |= (1<<11); // enable Chip Select
-	
-		
-	while(!(SPI0->S & 0x20)){} //wait until buffer not empty
+	PTB->PSOR |= (1<<D_C); // select data mode
+		delayMs(1);
 		for (unsigned int i = 0; (sizeof bitmap) / (sizeof bitmap[0]); i++)
-		{SPI0->D = bitmap[i];		}
-	while(!(SPI0->S & 0x80)){}
-	PTB->PSOR |= (1<<11);	
+		{spi_write(bitmap[i]);		}
+
 }
+ void spi_write(uint8_t address)
+ {
+	 volatile char dummy;
+	 PTB->PCOR |= (1<<SCE);	//enable Chip Select	
+	 delayMs(1);
+		while(!(SPI0->S & 0x20)){} //wait until buffer not empty
+		SPI0->D = address; // send address
+	while(!(SPI0->S & 0x80)){} // wait for the end of the data
+		dummy = SPI0->D;
+		PTB->PSOR |= (1<<SCE);	 // disable Chip Select
+		delayMs(1);
+ }
+ 
+ 
