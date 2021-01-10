@@ -34,10 +34,9 @@ void spi_init(void)
 	delayMs(100);
 	PTB->PCOR |= (1<<D_C); // set command mode
 	delayMs(1);
-	spi_write(0x21);
+	spi_write(0x21);//select extended instruction set
 	spi_write(0xBF); ///////////////////////////contrast
 	spi_write(0x04);//temperature coefficient
-	spi_write(0x14);
 	spi_write(0x20);//normal instruction set
 	spi_write(0x0D); // inverse mode
 	spi_write(0x0C);//display control - set normal mode
