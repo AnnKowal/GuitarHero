@@ -252,24 +252,25 @@ int main (void)
 	
 	__WFI();
 	if (newTick==1){
+		if(piosenka_FULL==0){
 		for(uint16_t k=0; k<5000; k++){	
 						UART0_read();
-						if(piosenka_FULL)		
+						if(piosenka_FULL==1)		
 						{
 						piosenka3[k]=piosenka2[0];
 						}
-						piosenka_FULL=0;
+						
 		}
-		
-		for (uint16_t t=0; t<5000; t++){
-		while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-					UART0->D = piosenka3[t];
-		}
+	}
+		//for (uint16_t t=0; t<5000; t++){
+		//while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+			//		UART0->D = piosenka3[t];
+		//}
 	
-		if( msTicks%2 == 0 ) {
+		//if( msTicks%2 == 0 ) {
 			slider=TSI_ReadSlider();
 			press_and_play_right(slider);
-					}
+					//}
 			}
 		}
 	}	
@@ -277,14 +278,20 @@ int main (void)
 	
 	
 	void press_and_play_right(uint8_t slider1){
-	if (slider1>66){
+	if (slider1>0){
 	
 			TPM0_Play();
+			while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+				UART0->D = play;
 		}
 	}
+	
+	
 void SysTick_Handler(void) {
 	msTicks++;
 	newTick = 1;
 }
+
+
 
 
