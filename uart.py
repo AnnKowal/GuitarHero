@@ -19,23 +19,28 @@ data1=data.split(',')
 wartosc=30000
 
 for i in range(len(data1)):
-    if i<5000:
+    if i>=30000 and i<31000 :
         data3.append(data1[i])
 
 with serial.Serial('COM5', 28800) as serial1:
     if serial1.isOpen():
         print('port otwarty')
-       # hh=0x22
-        #serial1.write(str.encode(str(hh)))
-        #zmienna5 = serial1.read(2)
-        #print(zmienna5)
+       # for c in range(2000000):
+
+        zmienna5 = serial1.read(1)
+        print(zmienna5)
         #serial1.write(str.encode(str(hh)))
         #zmienna5 = serial1.read(2)
         #print(zmienna5)
 
-        for k in range(5000):
+        for k in range(1000):
             serial1.write(str.encode(str(data3[k])))
 
-        for k1 in range(5000):
-            zmienna5 = serial1.read(1)
-            print(zmienna5)
+        zmienna6 = serial1.read(1)
+        print(zmienna6)
+
+        zmienna7 = serial1.read(1)
+        print(zmienna7)
+
+        zmienna8 = serial1.read(1)
+        print(zmienna8)
