@@ -1,9 +1,8 @@
 #include "tpm.h"
 #include "piosenka.h"
 
-
-
 void TPM0_IRQHandler(void);
+
 
 static uint8_t enable = 0;
 static uint32_t upSampleCNT = 0;
@@ -16,10 +15,9 @@ static uint8_t  play = 1;
 static uint8_t  liczba= 0;
 static uint8_t pause=0;
 
-
 void tpm1_init_pwm(void)
 {
-	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
+	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
 	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
 	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	PORTA->PCR[12] = PORT_PCR_MUX(2);
@@ -28,11 +26,10 @@ void tpm1_init_pwm(void)
 	TPM1->MOD = 100;
 	TPM1->SC &= ~TPM_SC_CPWMS_MASK; 
 	TPM1->CONTROLS[0].CnSC |= (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK);
-	TPM1->CONTROLS[0].CnV = 10;
+	TPM1->CONTROLS[0].CnV = 20;
 
 }
-
-
+	
 void TPM0_Init(void) {
 			
   SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;		//wlaczenie maski 
