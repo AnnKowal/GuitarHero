@@ -4,17 +4,20 @@ void TPM0_IRQHandler(void);
 static uint8_t enable = 0;
 static uint32_t upSampleCNT = 0;
 static uint32_t probka = 0;
-static uint32_t dlugosc = 5000;
+static uint32_t dlugosc = 3000;
 static uint32_t probka_do_odt = 0;
 static uint32_t upsampling = 20;
 static uint8_t  play = 1;
 static uint8_t  pause = 0;
+static uint8_t  liczba= 0;
 static uint8_t  empty=1;
 uint8_t  piosenka_FULL = 0;
 uint8_t temp=0;
 uint8_t temp2=0;
 static uint8_t piosenka2[];
 static uint8_t piosenka3[3000];
+
+static uint8_t znak=5;
 
 
 
@@ -89,10 +92,9 @@ void UART0_Init(void)
 	UART0->C2 |= (UART0_C2_TE_MASK | UART0_C2_RE_MASK);		
 }
 
-void UART0_read(){
+uint8_t UART0_read(){
 	if(UART0->S1 & UART0_S1_RDRF_MASK)
 	{
-
 		temp=UART0->D;	
 		if(!piosenka_FULL)
 		{
@@ -100,36 +102,74 @@ void UART0_read(){
 			piosenka_FULL=1;
 		}
 	}
+
+	return temp;
 }
+
+void UART0_read2(){
+	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+	UART0->D = znak;
+	for (uint16_t k=0; k<dlugosc; k++){
+		temp2=UART0_read();
+		piosenka3[k]=temp2;
+		piosenka_FULL=0;
+	}
+	
+}
+
 void TPM0_Play6(void) {   
 
 	play=1;
 	probka=0;
-		pause=0;
+	pause=0;
+	liczba=1;
+}
+
+void TPM0_Play0(void) {   
+
+	play=1;
+	probka=0;
+	pause=0;
+	liczba=2;
 }
 
 void TPM0_Pause(void){
 	play=0;
 	pause=1;
+	
 }
 void TPM0_IRQHandler(void) {
-//if(piosenka3[0]==0){	
-	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-	UART0->D = play;
-		for(uint16_t k=0; k<3000; k++){	
-						UART0_read();
-						if(piosenka_FULL==1)		
-						piosenka3[k]=temp;	
-						}
-		//empty=0;
-					//}
-				if (play==1) {
+			if (play==1 && liczba==2) {
 						if (upSampleCNT == 0){
-			
-						TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
+							UART0_read2();
+							probka_do_odt=probka++;
+							TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
 						}
 						if (probka > dlugosc ) {
 						play = 0;         
+				
+						TPM0->CONTROLS[2].CnV = 0;
+						}
+						if (++upSampleCNT > (upsampling-1)) 
+						{
+						upSampleCNT = 0;
+						}
+						}
+			
+						if (play==1 && liczba==1) {
+									while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+							UART0->D = play;
+							for(uint16_t w=0; w<dlugosc; w++){
+								UART0->D=piosenka3[w];
+							}
+						if (upSampleCNT == 0){
+							probka_do_odt=probka++;
+					
+							TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
+						}
+						if (probka > dlugosc ) {
+						play = 0;         
+				
 						TPM0->CONTROLS[2].CnV = 0;
 						}
 						if (++upSampleCNT > (upsampling-1)) 
@@ -139,5 +179,6 @@ void TPM0_IRQHandler(void) {
 						}
 				TPM0->CONTROLS[0].CnSC |= TPM_CnSC_CHF_MASK; 
 }
+
 
 	
