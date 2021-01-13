@@ -24,7 +24,10 @@ int main (void)
 	//SysTick_Config(1000000); //inicjalizacja timera
 
 	UART0_Init();
-	TPM0_Init();		
+	UART0_read2();
+	
+	TPM0_Init();	
+	//TPM0_Play0();	
 
 	SysTick_Config(SystemCoreClock/1000);
 	tpm1_init_pwm();
@@ -53,13 +56,10 @@ int main (void)
 	
 	__WFI();
 	if (newTick==1){
-		newTick=0;
 		if( msTicks%2 == 0 ) {
 				sliderTemp = TSI_ReadSlider();
 				if (sliderTemp > 0) {
 					TPM0_Play6();
-					while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-					UART0->D = znak;
 			}
 		}
 	}	
