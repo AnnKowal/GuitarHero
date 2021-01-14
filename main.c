@@ -1,8 +1,8 @@
 #include "frdm_bsp.h" 
 #include "tsi.h"
-//#include "spi.h"
+#include "spi.h"
 #include "tpm.h"  
-//#include "bitmaps.h"
+#include "bitmaps.h"
 
 
 void SysTick_Handler(void);
@@ -21,17 +21,17 @@ int main (void)
 	uint8_t sliderTemp;
 	TSI_init(); //inicjalizacja slidera
 
-	//SysTick_Config(1000000); //inicjalizacja timera
+	
 
 	UART0_Init();
 	UART0_read2();
 	
 	TPM0_Init();	
-	//TPM0_Play0();	
-
+	
 	SysTick_Config(SystemCoreClock/1000);
-	//tpm1_init_pwm();
-	/*
+	
+	tpm1_init_pwm();
+	
 	spi_init();
 	spi_write_data(title);
 	wait();
@@ -49,7 +49,7 @@ int main (void)
 	spi_write_data(snd2);
 		wait();
 	spi_write_data(snd3);
-		*/			
+					
 	while(1)
 	{
 		
