@@ -40,6 +40,7 @@ with serial.Serial('COM5', 28800) as serial1:
             if zmienna5 == zmienna6:
                 true1=1
                 for k in range(3000):
+                    time.sleep(0.1)
                     serial1.write(str.encode(str(data3[k])))
                 print('wyslano')
 
