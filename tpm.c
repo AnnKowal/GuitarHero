@@ -9,13 +9,13 @@ static uint32_t probka_do_odt = 0;
 static uint32_t upsampling = 20;
 static uint8_t  play = 1;
 static uint8_t  pause = 0;
-static uint8_t  liczba= 0;
-static uint8_t  empty=1;
+//static uint8_t  liczba= 0;
+//static uint8_t  empty=1;
 uint8_t  piosenka_FULL = 0;
-uint8_t temp=0;
-uint8_t temp2=0;
-static uint8_t piosenka2[];
-static uint8_t piosenka3[3000];
+unsigned char temp=0;
+unsigned char temp2=0;
+static unsigned char piosenka2[];
+static unsigned char piosenka3[3000];
 
 static uint8_t znak=5;
 
@@ -109,10 +109,12 @@ uint8_t UART0_read(){
 void UART0_read2(){
 	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
 	UART0->D = znak;
-	for (uint16_t k=0; k<dlugosc; k++){
-		temp2=UART0_read();
-		piosenka3[k]=temp2;
-		piosenka_FULL=0;
+	for (uint16_t k=0; k<=dlugosc; k++){
+			temp2=UART0_read();
+		//	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+		//	UART0->D = temp2;
+			piosenka3[k]=temp2;
+			piosenka_FULL=0;
 	}
 	
 }
@@ -122,9 +124,9 @@ void TPM0_Play6(void) {
 	play=1;
 	probka=0;
 	pause=0;
-	liczba=1;
+	//liczba=1;
 }
-
+/*
 void TPM0_Play0(void) {   
 
 	play=1;
@@ -132,16 +134,16 @@ void TPM0_Play0(void) {
 	pause=0;
 	liczba=2;
 }
-
+*/
 void TPM0_Pause(void){
 	play=0;
 	pause=1;
 	
 }
 void TPM0_IRQHandler(void) {
-			if (play==1 && liczba==2) {
+			/*if (play==1 && liczba==2) {
 						if (upSampleCNT == 0){
-							UART0_read2();
+							//UART0_read2();
 							probka_do_odt=probka++;
 							TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
 						}
@@ -155,19 +157,19 @@ void TPM0_IRQHandler(void) {
 						upSampleCNT = 0;
 						}
 						}
-			
-						if (play==1 && liczba==1) {
-									while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-							UART0->D = play;
-							for(uint16_t w=0; w<dlugosc; w++){
-								UART0->D=piosenka3[w];
-							}
+			*/
+						if (play==1) {
+							while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+								UART0->D = play;
+								//for(uint16_t w=0; w<=dlugosc; w++){
+								//	UART0->D=piosenka3[w];
+							//}
 						if (upSampleCNT == 0){
 							probka_do_odt=probka++;
 					
 							TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
 						}
-						if (probka > dlugosc ) {
+						if (probka >= dlugosc ) {
 						play = 0;         
 				
 						TPM0->CONTROLS[2].CnV = 0;
