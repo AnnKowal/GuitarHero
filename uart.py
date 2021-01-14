@@ -13,17 +13,28 @@ plik=open("piosenka.txt", "r")
 
 
 if plik.mode=="r":
-    data=plik.read()
+    lines = plik.readlines()
+    for line in lines:
+        data2.append(line.split(','))
 
-data1=data.split(',')
+
+for r in range(257641):
+    for c in range(12):
+        if c!=0 and r!=0:
+            data4.append(data2[r][c])
+#for c1 in range(len(data4)):
+ #   if c1!=0:
+  #      data5.append(data4[c1])
 
 wartosc=30000
 
-for i in range(len(data1)):
+for i in range(len(data4)):
     if i>=30000 and i<33000 :
-        data3.append(data1[i])
+        data3.append(data4[i])
+        print(data4[i])
 
-print(data3)
+
+
 zmienna6=b'\x05'
 zmienna8=b'\x01'
 true1=0
@@ -39,9 +50,13 @@ with serial.Serial('COM5', 28800) as serial1:
 
             if zmienna5 == zmienna6:
                 true1=1
-                for k in range(3000):
-                    time.sleep(0.1)
+                print('wysylanie')
+                for k in range(len(data3)):
+                    time.sleep(0.001)
                     serial1.write(str.encode(str(data3[k])))
+                    time.sleep(0.001)
+                    zmienna11=serial1.read(1)
+                    print(zmienna11)
                 print('wyslano')
 
         if true1==1:
@@ -51,7 +66,8 @@ with serial.Serial('COM5', 28800) as serial1:
             if zmienna7 == zmienna8:
                 time.sleep(0.1)
                 true2=1
-                for t in range(3000):
-                    zmienna9=serial1.read(1)
-                    print(zmienna9)
-                print('odebrano')
+                if true2!=1:
+                    for t in range(3000):
+                        zmienna9=serial1.read(1)
+                        print(zmienna9)
+                    print('odebrano')
