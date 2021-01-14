@@ -51,8 +51,7 @@ with serial.Serial('COM5', 28800) as serial1:
             if zmienna7 == zmienna8:
                 time.sleep(0.1)
                 true2=1
-                if true2!=1:
-                    for t in range(3000):
-                        zmienna9=serial1.read(1)
-                        print(zmienna9)
-                    print('odebrano')
+                for t in range(3000):
+                    zmienna9=serial1.read(1)
+                    print(zmienna9)
+                print('odebrano')
