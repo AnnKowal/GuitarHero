@@ -29,7 +29,7 @@ for r in range(257641):
 wartosc=30000
 
 for i in range(len(data4)):
-    if i>=30000 and i<33000 :
+    if i>=30000 and i<30100 :
         data3.append(data4[i])
         print(data4[i])
 
@@ -63,11 +63,3 @@ with serial.Serial('COM5', 28800) as serial1:
             zmienna7 = serial1.read(1)
             print(zmienna7)
 
-            if zmienna7 == zmienna8:
-                time.sleep(0.1)
-                true2=1
-                if true2!=1:
-                    for t in range(3000):
-                        zmienna9=serial1.read(1)
-                        print(zmienna9)
-                    print('odebrano')
