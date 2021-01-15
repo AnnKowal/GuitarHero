@@ -4,7 +4,7 @@ void TPM0_IRQHandler(void);
 static uint8_t enable = 0;
 static uint32_t upSampleCNT = 0;
 static uint32_t probka = 0;
-static uint32_t dlugosc = 3000;
+static uint32_t dlugosc = 100;
 static uint32_t probka_do_odt = 0;
 static uint32_t upsampling = 20;
 static uint8_t  play = 1;
@@ -111,8 +111,8 @@ void UART0_read2(){
 	UART0->D = znak;
 	for (uint16_t k=0; k<=dlugosc; k++){
 			temp2=UART0_read();
-		//	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-		//	UART0->D = temp2;
+			while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+			UART0->D = temp2;
 			piosenka3[k]=temp2;
 			piosenka_FULL=0;
 	}
@@ -159,11 +159,11 @@ void TPM0_IRQHandler(void) {
 						}
 			*/
 						if (play==1) {
-							while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-								UART0->D = play;
+							//while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+								//UART0->D = play;
 								//for(uint16_t w=0; w<=dlugosc; w++){
-								//	UART0->D=piosenka3[w];
-							//}
+									//UART0->D=piosenka3[w];
+							
 						if (upSampleCNT == 0){
 							probka_do_odt=probka++;
 					
