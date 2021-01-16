@@ -6,12 +6,11 @@
 
 
 void SysTick_Handler(void);
-void press_and_play_right(uint8_t);
+
 
 void wait(void);
 static uint8_t msTicks = 0;
 static uint8_t newTick = 0;
-char znak='a';
 
 
 
@@ -57,16 +56,23 @@ while(1)
 	if (newTick==1){
 				sliderTemp = TSI_ReadSlider();
 				if (sliderTemp > 0) {
-					while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-					UART0->D = znak;
-					TPM0_Play1();
+					//if (msTicks%3==0 || msTicks%3==1){
+					//while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+					//UART0->D = znak;
+					//UART0_read3();
+					//TPM0_Play1();
+				//}
+					//else{
+						TPM0_Play1();
 					}
-			
-				newTick=0;
+					newTick=0;
 		}
 	
 	}
 }
+
+
+
 
 	
 void SysTick_Handler(void) {

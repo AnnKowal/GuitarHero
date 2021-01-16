@@ -1,6 +1,5 @@
 #include "tpm.h"
 
-//#include "uart.h"
 void TPM0_IRQHandler(void);
 static uint8_t enable = 0;
 static uint32_t upSampleCNT = 0;
@@ -9,9 +8,6 @@ static uint32_t dlugosc = 12000;
 static uint32_t probka_do_odt = 0;
 static uint32_t upsampling = 10;
 static uint8_t  play = 1;
-static uint8_t  pause = 0;
-static uint8_t  liczba= 0;
-static uint8_t  empty=1;
 uint8_t  piosenka_FULL = 0;
 unsigned char temp=0;
 unsigned char temp2=0;
@@ -109,122 +105,96 @@ uint8_t UART0_read(){
 
 	return temp;
 }
-/*
-void UART0_read2(){
-	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-	UART0->D = znak;
-	for (uint16_t k=0; k<dlugosc; k++){
-			temp2=UART0_read();
-			piosenka3[k]=temp2;
-			piosenka_FULL=0;
-			
-	}
-	
-}
-*/
 
 void UART0_read2(){
+	temp3=0;
 	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
 	UART0->D = znak;
 	for (uint16_t k=0; k<dlugosc; k++){
 			temp2=UART0_read();
-		
 			
 		if (k%4==3)
 		{
 			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
-			{temp4=temp4*16+(temp2-87);}
-			else{temp4=temp4*16+(temp2-48);}
-		//UART0->D = temp4;
-			temp3=temp3+1;
-			piosenka3[temp3]=temp4;	
-		}
-		else if(k%4==2)
-		{
-			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
-			{temp4=temp4+(temp2-87);}
-			else
-				{temp4=temp4+(temp2-48);}
-		}
-		else
-		{
-			temp4=0;
-		}
-			
+			{
+				temp4=temp4*16+(temp2-87);
+			}
+			else{
+				temp4=temp4*16+(temp2-48);
+			}
 	
-			piosenka_FULL=0;
-	}
-	
-}
-void UART0_read3(){
-	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-	UART0->D = znak1;
-	for (uint16_t k=0; k<dlugosc; k++){
-			temp2=UART0_read();
-	
-		if (k%4==3)
-		{
-			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
-			{temp4=temp4*16+(temp2-87);}
-			else{temp4=temp4*16+(temp2-48);}
-		//UART0->D = temp4;
 		temp3=temp3+1;
 		piosenka3[temp3]=temp4;	
 		}
 		else if(k%4==2)
 		{
 			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
-			{temp4=temp4+(temp2-87);}
+			{
+				temp4=temp4+(temp2-87);
+			}
 			else
-				{temp4=temp4+(temp2-48);}
+				{
+				temp4=temp4+(temp2-48);
+				}
+		}
+		else
+		{
+			temp4=0;
+		}
+	piosenka_FULL=0;
+	}
+}
+void UART0_read3(){
+	temp3=0;
+	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+		UART0->D = znak1;
+	for (uint16_t k=0; k<dlugosc; k++){
+			temp2=UART0_read();
+	
+		if (k%4==3)
+		{
+			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
+			{
+				temp4=temp4*16+(temp2-87);
+			}
+			else{
+				temp4=temp4*16+(temp2-48);
+			}
+		temp3=temp3+1;
+		piosenka3[temp3]=temp4;	
+		}
+		
+		else if(k%4==2)
+		{
+			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
+			{
+				temp4=temp4+(temp2-87);
+			}
+			else
+				{
+				temp4=temp4+(temp2-48);
+				}
 		}
 		else
 		{
 			temp4=0;
 		}
 			
-			piosenka_FULL=0;
+		piosenka_FULL=0;
 	}
 	
-}
-
-
-
-void TPM0_Play6(void) {   
-
-	play=1;
-	probka=0;
-	pause=0;
-}
-
-
-void TPM0_Play0(void) {   
-	
-	play=1;
-	probka=0;
-	pause=0;
-
 }
 
 void TPM0_Play1(void) { 
 	play=1;
 	probka=0;
-	pause=0;
-
 }
 
-void TPM0_Pause(void){
-	play=0;
-	pause=1;
-	
-}
 void TPM0_IRQHandler(void) {
 						if (play==1 ) {
 						if (upSampleCNT == 0){
 							probka_do_odt=probka++;
-					
 							TPM0->CONTROLS[2].CnV = piosenka3[probka_do_odt]; 
-					
 						}
 						if (probka > 3000 ) {
 						play = 0;         
@@ -235,11 +205,7 @@ void TPM0_IRQHandler(void) {
 						{
 						upSampleCNT = 0;
 						}
-						}
-			
-
-						
-						
+					}		
 				TPM0->CONTROLS[0].CnSC |= TPM_CnSC_CHF_MASK; 
 }
 

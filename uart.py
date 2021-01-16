@@ -53,12 +53,12 @@ with serial.Serial('COM5', 28800) as serial1:
         zmienna5 = serial1.read(1)
         print(zmienna5)
 
-      #  if zmienna5 == zmienna6 and true1!=1:
-       #     print('wysylanie')
-        #    for k in range(len(data7)):
-         #       serial1.write(str.encode(str(data7[k])))
-          #      true1=1
-           # print('wyslano')
+        if zmienna5 == zmienna6 and true1!=1:
+            print('wysylanie')
+            for k in range(len(data7)):
+                serial1.write(str.encode(str(data7[k])))
+                true1=1
+            print('wyslano')
 
         if zmienna5 == zmienna8 and true2!=1:
             print('wysylanie')
