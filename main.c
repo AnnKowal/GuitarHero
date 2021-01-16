@@ -11,35 +11,19 @@ void press_and_play_right(uint8_t);
 void wait(void);
 static uint8_t msTicks = 0;
 static uint8_t newTick = 0;
-static uint8_t liczba1= 0;
+char znak='a';
 
-static char znak='a';
 
 
 int main (void)
 {	
 	
 	uint8_t sliderTemp;
-	TSI_init(); //inicjalizacja slidera
-
-	//SysTick_Config(1000000); //inicjalizacja timera
+	TSI_init(); 
 
 	UART0_Init();
-	UART0_read2();
-	wait();
-	wait();
-	wait();
-	wait();
-	wait();
-	wait();
-		wait();
-	wait();
-	wait();
-	wait();
-	wait();
-	wait();
-		wait();
-		
+	UART0_read3();
+	
 	TPM0_Init();	
 	//TPM0_Play1();	
 
@@ -64,63 +48,27 @@ int main (void)
 		wait();
 	spi_write_data(snd3);
 	*/			
-	while(1)
-	{
+while(1)
+{
+		
 		
 	
 	__WFI();
 	if (newTick==1){
-		//if( msTicks%2 == 0 ) {
 				sliderTemp = TSI_ReadSlider();
 				if (sliderTemp > 0) {
-					//UART0_read3();
-					//	wait();
-					//	wait();
-					//	wait();
-					//	wait();
-					//	wait();				
-					//	wait();
-					//	wait();
-					//	wait();
-					//	wait();
-					///	wait();
-						//wait();
-						//wait();
-						//wait();
-					liczba1=msTicks%4;
-						while(!(UART0->S1 & UART0_S1_TDRE_MASK));
-						UART0->D = liczba1;
-						TPM0_Play1();
-			}
+					while(!(UART0->S1 & UART0_S1_TDRE_MASK));
+					UART0->D = znak;
+					TPM0_Play1();
+					}
+			
 				newTick=0;
 		}
 	
-}
-	}
-		/*if( msTicks%2 == 1 ) {
-				sliderTemp = TSI_ReadSlider();
-			if (sliderTemp > 0) {
-						UART0_read2();
-						wait();
-						wait();
-						wait();
-						wait();
-						wait();				
-						wait();
-						wait();
-						wait();
-						wait();
-						wait();
-						wait();
-						wait();
-					TPM0_Play0();
-			}
-		}
-		
 	}
 }
-	}
-*/
+
+	
 void SysTick_Handler(void) {
 	msTicks++;
 	newTick = 1;
