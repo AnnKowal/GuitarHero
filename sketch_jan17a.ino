@@ -1,22 +1,27 @@
 #define pin 3
+
 unsigned char temp2=0;
 int temp4=0;
 char zmienna='8';
-int wypelnienie=0;
+
 
 
 
 
  void setup(){
     pinMode(pin, OUTPUT);
+ 
     Serial.begin(28800);
+
+    
     
   }
 
 void loop(){
-   Serial.println(zmienna); 
 
-   for (int k=0; k<=12000; k++){  
+Serial.write(zmienna);
+  
+ for (int k=0; k<=12000; k++){  
      if(Serial.available() > 0)
     {
       temp2=Serial.read();
@@ -51,7 +56,9 @@ void loop(){
     }
      
   }
-  analogWrite(pin, LOW);  
+  
+  analogWrite(pin, LOW);
+
 }
 
 
