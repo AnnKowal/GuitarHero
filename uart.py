@@ -9,61 +9,60 @@ data6=[]
 data7=[]
 data8=[]
 
-plik=open("piosenka1.txt", "r", encoding='utf-8')
 
+plik=open("piosenka.txt", "r")
 
 if plik.mode=="r":
     lines = plik.readlines()
     for line in lines:
-        line=line[1:-2]
-        data2.append(line.split(', '))
+            line = line[1:-2]
+            data2.append(line.split(','))
 
 
-for r in range(257641):
+for r in range(943):
     for c in range(12):
-        if c!=0:
-            data4.append(data2[r][c])
-print(len(data4))
-for p in range(len(data4)):
-    if p%3==0:
-        data5.append(data4[p])
+            data2[r][c]=int(data2[r][c],16)
+            data4.append(hex(data2[r][c]))
 
 
+wartosc=30000
 
-for i in range(len(data5)):
-    if i >= 67000 and i < 70000:
-        data7.append(data5[i])
-    if  i<3000:
-        data3.append(data5[i])
+for i in range(len(data4)):
+ #  if i>=0 and i<3000 :
+        data3.append(data4[i])
 
 
-print(len(data3))
-print(len(data7))
-
+print(data3)
 zmienna6=b'\x05'
-zmienna8=b'\x08'
+zmienna8=b'\x01'
 true1=0
 true2=0
 
-with serial.Serial('COM5', 28800) as serial1:
+with serial.Serial('COM3', 28800) as serial1:
     while serial1.isOpen():
         print('port otwarty')
 
+        if true1!=1:
+            zmienna5 = serial1.read(1)
 
-        zmienna5 = serial1.read(1)
-        print(zmienna5)
+            if zmienna5 == zmienna6:
+                print('wysylanie')
+                for k in range(len(data3)):
+                    time.sleep(0.01)
+                    serial1.write(data3[k].encode())
+                    time.sleep(0.01)
+                    zmienna11=serial1.read(1)
+                    print (zmienna11.hex())
+                print('wyslano')
 
-        if zmienna5 == zmienna6 and true1!=1:
-            print('wysylanie')
-            for k in range(len(data7)):
-                serial1.write(str.encode(str(data7[k])))
-                true1=1
-            print('wyslano')
+        if true1==1:
+            zmienna7 = serial1.read(1)
+            print(zmienna7)
 
-        if zmienna5 == zmienna8 and true2!=1:
-            print('wysylanie')
-            for k1 in range(len(data7)):
-                serial1.write(str.encode(str(data7[k1])))
-            print('wyslano')
-            true2=1
-
+            if zmienna7 == zmienna8:
+                time.sleep(0.1)
+                true2=1
+                if true2!=1:
+                    for t in range(3000):
+                        zmienna9=serial1.read(1)
+                    print('odebrano')

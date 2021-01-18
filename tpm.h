@@ -7,14 +7,12 @@
 
 #include "frdm_bsp.h"
 
-uint8_t UART0_read(void);
-void UART0_read2(void);
-void UART0_Init(void);
+
+
 void tpm1_init_pwm(void);
 
 void TPM0_Init(void);
-void TPM0_Play6(void);
-//void TPM0_Play0(void);
+void TPM0_Play6(unsigned char z);
 void TPM0_Pause(void);
 
 #endif 
