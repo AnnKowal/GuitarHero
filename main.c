@@ -21,8 +21,8 @@ int main (void)
 	uint8_t sliderTemp;
  //inicjalizacja slidera
 TSI_init();
-	//SysTick_Config(1000000); //inicjalizacja timera
-	SysTick_Config(SystemCoreClock/1000);
+	SysTick_Config(1000000); //inicjalizacja timera
+	//SysTick_Config(SystemCoreClock/1000);
 
 	
 TPM0_Init();
@@ -48,7 +48,7 @@ UART0_Init();
 	spi_write_data(snd3);
 		*/		
 
-
+//TPM0_Play6(1);
 	while(1)
 	{
 		
@@ -59,7 +59,10 @@ UART0_Init();
 		if( msTicks%2 == 0 ) {
 				sliderTemp = TSI_ReadSlider();
 				if (sliderTemp > 0) {
-					UART0_read2();
+		//				TPM0_Play6(1);
+			UART0_read2();
+	//					TPM0_Play6(1);
+
 			}
 		}
 	}	
