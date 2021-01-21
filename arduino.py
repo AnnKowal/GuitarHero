@@ -45,9 +45,10 @@ with serial.Serial('COM5', 921600) as serial1:
         data7.clear()
         print('port otwarty')
         for i in range(len(data4)):
-            if i%5==0:
+            if i%2==0 and i>6000:
                 if i >= z1 and len(data3)<3000:
                     data3.append(data4[i])
+
                 elif i >= z2 and len(data7)<3000:
                     data7.append(data4[i])
                 elif i>=z3 and len(data8)<3000:
