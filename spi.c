@@ -46,6 +46,9 @@ void spi_init(void)
 
 void spi_write_data(const unsigned char bitmap[])
 {
+	PTB->PCOR |= (1<<D_C);
+	spi_write(0x40);
+	spi_write(0x80);
 	PTB->PSOR |= (1<<D_C); // select data mode
 		for (unsigned int i = 0; i< 505; i++)//((sizeof bitmap) / (sizeof bitmap[0])); i++)
 		{spi_write(bitmap[i]);		}
