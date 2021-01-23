@@ -1435,6 +1435,12 @@ const unsigned char o30_puste [] = {
 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0xC1, 0x81, 0xC1, 0xC2, 0x43, 0x7F,
 0xFF, 0xFF, 0xFF, 0xFC, 0xC0, 0x00, 0x00, 0x00, 
 };
-static const unsigned char *table[37]={title,authors,beginning, o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11, o12, o13pelne, o14, o15, o16pelne, o17, o17, o18pelne, o19, o20, o20_5_pelny, o21 ,o22, o23_pelne, o24, o24, o25_pelne, o26, o277, o28_pelne, o29, o29, o30_pelne};
+static const unsigned char *table[138]={title,authors,beginning, o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11, o12, o13pelne, o14, o14, o15,
+o15, o16pelne, o17, o17, o17,  o18pelne, o19, o19, o20, o20,  o20_5_pelny, o21, o21,o22, o22, o23_pelne, o24, o24, o24, o25_pelne, 
+o26, o26, o277, o277,  o28_pelne, o29, o29,o29, o30_pelne, o1,o3,o5,o7,o9, o12, o13pelne, o14, o14, o15,
+o15, o16pelne, o17, o17, o17,  o18pelne, o19, o19, o20, o20,  o20_5_pelny, o21, o21,o22, o22, o23_pelne, o24, o24, o24, o25_pelne, 
+o26, o26, o277, o277,  o28_pelne, o29, o29,o29, o30_pelne,o1,o3,o5,o7,o9,o11, o13pelne, o14, o14, o15,
+o15, o16pelne, o17, o17, o17,  o18pelne, o19, o19, o20, o20,  o20_5_pelny, o21, o21,o22, o22, o23_pelne, o24, o24, o24, o25_pelne, 
+o26, o26, o277, o277,  o28_pelne, o29, o29,o29, o30_pelne,};
 	
 	
