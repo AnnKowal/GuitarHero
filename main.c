@@ -61,46 +61,25 @@ uint8_t sliderTemp;
 	spi_write_data(o11);
 	spi_write_data(o12);
 	
-
-
-//TPM0_Play6(1);
 	while(1)
 	{
-//wait();
-	//spi_write_data(snd2);
-		//wait();
-	//spi_write_data(snd3);
-	//spi_write_data(table[nr++]);
-	//wait();
-	//spi_write_data(o13pelne);
-	//wait();
-	//__WFI();
-	
-	//	__WFI();
 	if (newTick==1){
 		newTick=0;
 		if( msTicks%2 == 0 ) {
-							spi_write_data(table[nr++]);
-
-				UART0_read2();
-//wait();
-				sliderTemp = TSI_ReadSlider();
+			spi_write_data(table[nr++]);
+			UART0_read2();
+			sliderTemp = TSI_ReadSlider();
 				
 			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0])){
 					
 						TPM0_Play6(1);
 						points=points+1;
-	//				wait();
-					//	UART0_read2();
-						//TPM0_Play6(1);
 			}
-				else{
-			spi_write_data(table[nr++]);
-			wait();
-			//wait();
-
-		}
-				tsi_nr++;
+			else{
+				spi_write_data(table[nr++]);
+				wait();
+			}
+			tsi_nr++;
 				
 		}
 	}
@@ -111,7 +90,20 @@ uint8_t sliderTemp;
 	}
 		
 	if (nr==8 && iter==2){
-		
+		spi_write_data(pp);
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+
 		if (points==0){
 		spi_write_data(p0);
 		}
@@ -186,14 +178,20 @@ uint8_t sliderTemp;
 		}
 		else if (points==22){
 		spi_write_data(p220);
-		}/*
+		}
 		else if (points==23){
 		spi_write_data(p230);
 		}
 		else if (points==24){
 		spi_write_data(p240);
 		}
-		*/
+		
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
+		wait();
 		wait();
 		wait();
 		wait();
@@ -201,24 +199,10 @@ uint8_t sliderTemp;
 		wait();
 		wait();
 		spi_write_data(ending);
-		wait();
-		wait();
-		wait();
-		wait();
-		wait();
-		wait();
+	
 	}
 	
 }
-	/*if (points==0){
-		spi_write_data(p0);
-		wait();
-	}
-	else if (points==1){
-		spi_write_data(p1);
-	}
-*/
-
 }
 void SysTick_Handler(void) {
 	msTicks++;

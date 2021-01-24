@@ -1,3 +1,4 @@
+
 #include "spi.h"
 
 
@@ -50,8 +51,12 @@ void spi_write_data(const unsigned char bitmap[])
 	spi_write(0x40);
 	spi_write(0x80);
 	PTB->PSOR |= (1<<D_C); // select data mode
+	
 		for (unsigned int i = 0; i< 505; i++)//((sizeof bitmap) / (sizeof bitmap[0])); i++)
-		{spi_write(bitmap[i]);		}
+		{spi_write(bitmap[i]);	
+			
+		}
+		//delayMs(1);
 
 }
  void spi_write(uint8_t address)
@@ -64,5 +69,4 @@ void spi_write_data(const unsigned char bitmap[])
 		dummy = SPI0->D;
 		PTB->PSOR |= (1<<SCE);	 // disable Chip Select
  }
- 
  
