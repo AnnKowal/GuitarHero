@@ -49,17 +49,27 @@ uint8_t sliderTemp;
 	
 	
 	spi_write_data(o1);
+	wait();
 	spi_write_data(o2);
+	wait();
 	spi_write_data(o3);
+	wait();
 	spi_write_data(o4);
+	wait();
 	spi_write_data(o5);
+	wait();
 	spi_write_data(o6);
+	wait();
 	spi_write_data(o7);
+	wait();
 	spi_write_data(o8);
+	wait();
 	spi_write_data(o9);
+	wait();
 	spi_write_data(o10);
-	spi_write_data(o11);
+	wait();
 	spi_write_data(o12);
+	wait();
 	
 	while(1)
 	{
@@ -83,19 +93,23 @@ uint8_t sliderTemp;
 				
 		}
 	}
-	if (nr==6 && iter<2){
+	if (nr==6 && iter==0){
 		nr=0;
 		iter=iter+1;
 		tsi_nr=0;
 	}
 		
-	if (nr==6 && iter==2){
+	
+	if (nr==6 && iter==1){
+		nr=6;
+		iter=iter+1;
+		tsi_nr=0;
+	}
+	
+	
+	
+	if (nr==14 && iter==2){
 		spi_write_data(pp);
-		wait();
-		wait();
-		wait();
-		wait();
-		wait();
 		wait();
 		wait();
 		wait();
@@ -167,14 +181,13 @@ uint8_t sliderTemp;
 		else if (points==18){
 		spi_write_data(p180);
 		}
-		/*
 		else if (points==19){
 		spi_write_data(p190);
 		}
 		else if (points==20){
 		spi_write_data(p200);
 		}
-		else if (points==21){
+	/*	else if (points==21){
 		spi_write_data(p210);
 		}
 		else if (points==22){
@@ -187,7 +200,6 @@ uint8_t sliderTemp;
 		spi_write_data(p240);
 		}
 		*/
-		
 		wait();
 		wait();
 		wait();
