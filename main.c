@@ -83,13 +83,13 @@ uint8_t sliderTemp;
 				
 		}
 	}
-	if (nr==8 && iter<2){
+	if (nr==6 && iter<2){
 		nr=0;
 		iter=iter+1;
 		tsi_nr=0;
 	}
 		
-	if (nr==8 && iter==2){
+	if (nr==6 && iter==2){
 		spi_write_data(pp);
 		wait();
 		wait();
@@ -167,6 +167,7 @@ uint8_t sliderTemp;
 		else if (points==18){
 		spi_write_data(p180);
 		}
+		/*
 		else if (points==19){
 		spi_write_data(p190);
 		}
@@ -185,6 +186,7 @@ uint8_t sliderTemp;
 		else if (points==24){
 		spi_write_data(p240);
 		}
+		*/
 		
 		wait();
 		wait();
