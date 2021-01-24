@@ -14,6 +14,7 @@ static uint8_t newTick = 0;
 
 
 static int nr=0; 
+static int tsi_nr=0;
 
 int main (void)
 {	
@@ -49,25 +50,25 @@ UART0_Init();
 	//spi_write_data(snd1);
 
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
-	wait();
+	//wait();
 	spi_write_data(table[nr++]);
 	
 
@@ -79,8 +80,8 @@ UART0_Init();
 	//spi_write_data(snd2);
 		//wait();
 	//spi_write_data(snd3);
-	spi_write_data(table[nr++]);
-	wait();
+	//spi_write_data(table[nr++]);
+	//wait();
 	//spi_write_data(o13pelne);
 	//wait();
 	//__WFI();
@@ -95,9 +96,8 @@ UART0_Init();
 //wait();
 				sliderTemp = TSI_ReadSlider();
 				
-				if (sliderTemp > 0) {
+			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0])){
 					
-						
 						TPM0_Play6(1);
 	//				wait();
 					//	UART0_read2();
@@ -109,6 +109,8 @@ UART0_Init();
 			//wait();
 
 		}
+				tsi_nr++;
+				
 		}
 	}
 		
