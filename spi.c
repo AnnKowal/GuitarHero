@@ -20,7 +20,7 @@ void spi_init(void)
 	PORTA->PCR[7] = PORT_PCR_MUX(3); ///MOSI
 	SPI0->C1 = SPI_C1_MSTR_MASK;//set as master
 	SPI0->BR = 0x70; // baud rate = 1,3 MHz
-  SPI0->C1 |= SPI_C1_SPE_MASK; // spi system enabled
+ 	 SPI0->C1 |= SPI_C1_SPE_MASK; // spi system enabled
 	SPI0->C1 &= ~(SPI_C1_CPOL_MASK // active high spi clock
 								|SPI_C1_SPIE_MASK // inhibited interrupts from SPRF and MODF 
 								|SPI_C1_CPHA_MASK); // first edge on SPSCK occured at the middle of the first cycle of data transfer
@@ -37,7 +37,7 @@ void spi_init(void)
 	delayMs(100);
 	PTB->PCOR |= (1<<D_C); // set command mode
 	spi_write(0x21);//select extended instruction set
-	spi_write(0xC7); ///////////////////////////contrast
+	spi_write(0xC7); //contrast
 	spi_write(0x04);//temperature coefficient
 	spi_write(0x20);//normal instruction set
 	spi_write(0x0D); // inverse mode
@@ -56,7 +56,6 @@ void spi_write_data(const unsigned char bitmap[])
 		{spi_write(bitmap[i]);	
 			
 		}
-		//delayMs(1);
 
 }
  void spi_write(uint8_t address)
