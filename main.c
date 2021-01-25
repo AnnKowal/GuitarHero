@@ -6,22 +6,18 @@
 
 
 void SysTick_Handler(void);
-void press_and_play_right(uint8_t);
-
 void wait(void);
+
 static uint8_t msTicks = 0;
 static uint8_t newTick = 0;
 static uint8_t points=0;
-
 static int nr=0; 
 static int tsi_nr=0;
 static int iter=0;
 
 int main (void)
 {	
-
-	
-uint8_t sliderTemp;
+	uint8_t sliderTemp;
 
 	TSI_init(); //inicjalizacja slidera
 	SysTick_Config(1000000); //ustawienie timera
@@ -108,19 +104,19 @@ uint8_t sliderTemp;
 	
 	while(1)
 	{
-	if (newTick==1){
+	if (newTick==1){ //jezeli bylo przerwanie
 		newTick=0;
-		if( msTicks%2 == 0 ) {
-			spi_write_data(table[nr++]);
-			UART0_read2();
-			sliderTemp = TSI_ReadSlider();
+		if( msTicks%2 == 0 ) { //jezeli liczba przerwan jest podzielna bez reszty przez 2
+			spi_write_data(table[nr++]); //przeslanie do wyswietlacza kolejnej bitmapy 
+			UART0_read2(); //odczyt probek dzwieku z komputera poprzez UART
+			sliderTemp = TSI_ReadSlider(); //sprawdzenie stanu slidera dotykowego
 				
-			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0]))
+			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0])) //jezeli dotknieto w odpowiednim, zgodnym ze schematem na wyswietlaczu miejscu
 			{
-				TPM0_Play6(1);
-				points=points+1;
+				TPM0_Play6(1); //odtworzenie fragmentu piosenki
+				points=points+1; //naliczenie punktu
 			}
-			else{
+			else{ //jezeli nie wcisieto wcale lub wcisnieto w zlym miejscu, dzwiek nie jest odtwarzany i punkt nie nalicza sie
 				wait();
 				wait();
 			}
@@ -129,14 +125,14 @@ uint8_t sliderTemp;
 				
 		}
 	}
-	if (nr==6 && iter==0){
+	if (nr==6 && iter==0){ //jezeli minal pierwszy obieg po tablicy z bitmapami, bitmapy zaczynaja wwyswietlac sie od poczatku tablicy
 		nr=0;
 		iter=iter+1;
 		tsi_nr=0;
 	}
 		
 	
-	if (nr==6 && iter==1){
+	if (nr==6 && iter==1){ //jezeli minal drugi obieg po tablicy z bitmapami, bitmapy zaczynaja wwyswietlac sie od poczatku tablicy
 		nr=6;
 		iter=iter+1;
 		tsi_nr=0;
@@ -144,8 +140,8 @@ uint8_t sliderTemp;
 	
 	
 	
-	if (nr==14 && iter==2){
-		spi_write_data(pp);
+	if (nr==14 && iter==2){ //jezeli gra sie skonczyla
+		spi_write_data(pp); //wyswietlenie bitmapy "points"
 		wait();
 		wait();
 		wait();
@@ -153,7 +149,7 @@ uint8_t sliderTemp;
 		wait();
 		wait();
 		wait();
-
+		//w zaleznosci od ilosci zdobytych punktow, wyswietlenie bitmapy, informujacej o ich liczbie
 		if (points==0){
 		spi_write_data(p0);
 		}
@@ -228,7 +224,7 @@ uint8_t sliderTemp;
 		wait();
 		wait();
 		wait();
-		spi_write_data(ending);
+		spi_write_data(ending); //wyswietlenie koncowej bitmapy
 		wait();
 		wait();
 		wait();
