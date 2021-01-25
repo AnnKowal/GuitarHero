@@ -17,7 +17,6 @@ static uint32_t upSampleCNT = 0;
 static uint32_t probka = 0;
 static const uint32_t upsampling =11;
 static uint8_t  play=0;
-static uint8_t  pause = 0;
 
 //poczatkowe probki piosenki, ktore sa odtwarzane zanim nastapi odczyt z UARTA
 static volatile uint8_t piosenka5[3000]={
@@ -278,13 +277,13 @@ void tpm1_init_pwm(void)
 {
 
 	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
-	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
-	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-	PORTA->PCR[12] = PORT_PCR_MUX(2);
-	TPM1->SC |= TPM_SC_PS(7);
+	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1); //wybor zrodla zegara
+	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK; //podlaczenie zegara do portu A
+	PORTA->PCR[12] = PORT_PCR_MUX(2); //ustawienie multipleksera
+	TPM1->SC |= TPM_SC_PS(7); //ustawienie preskalera
 	TPM1->SC |= TPM_SC_CMOD(1);
-	TPM1->MOD = 100;
-	TPM1->SC &= ~TPM_SC_CPWMS_MASK; 
+	TPM1->MOD = 100; //wybor wartosci modulo
+	TPM1->SC &= ~TPM_SC_CPWMS_MASK; //zliczanie w gore
 	TPM1->CONTROLS[0].CnSC |= (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK);
 	TPM1->CONTROLS[0].CnV = 20;
 
@@ -349,9 +348,9 @@ void UART0_read2(){
 	while(!(UART0->S1 & UART0_S1_TDRE_MASK)); 
 	UART0->D = znak; //wyslanie przez UART zmiennej swiadczacej o checi przyjecia probek dzwieku
 	
-	for (uint32_t k=0; k<dlugosc; k++){	
+	for (uint32_t k=0; k<dlugosc; k++){	//w petli odczytywane sa dane z UARTA, zamieniane z ASCII na hex i wpisywane do tablicy
 		while(!(UART0->S1 & UART0_S1_RDRF_MASK)){}
-		temp2=UART0->D;
+		temp2=UART0->D; //odbiranie jednej probki
 			
 		if (k%4==3)
 		{
@@ -360,7 +359,8 @@ void UART0_read2(){
 			else{temp4=temp4*16+(temp2-0x30);
 			
 			}
-				while(!(UART0->S1 & UART0_S1_TDRE_MASK));			UART0->D = temp4;
+				while(!(UART0->S1 & UART0_S1_TDRE_MASK));			
+				UART0->D = temp4;
 				piosenka5[temp3]=temp4;
 				temp3++;	
 		else if(k%4==2)
