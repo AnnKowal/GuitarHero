@@ -132,7 +132,7 @@ int main (void)
 	}
 		
 	
-	if (nr==6 && iter==1){ //jezeli minal drugi obieg po tablicy z bitmapami, bitmapy zaczynaja wwyswietlac sie od poczatku tablicy
+	if (nr==6 && iter==1){ //jezeli minal drugi obieg po tablicy z bitmapami, bitmapy zaczynaja wyswietlac sie od szostego elementu tablicy
 		nr=6;
 		iter=iter+1;
 		tsi_nr=0;
