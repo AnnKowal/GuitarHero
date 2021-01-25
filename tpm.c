@@ -13,6 +13,8 @@ static uint32_t probka = 0;
 static const uint32_t upsampling =11;
 static uint8_t  play=0;
 static uint8_t  pause = 0;
+
+//poczatkowe probki piosenki, ktore sa odtwarzane zanim nastapi odczyt z UARTA
 static volatile uint8_t piosenka5[3000]={
 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
 	0x7F, 0x80, 0x80, 0x7F, 0x7F, 0x80, 0x80, 0x7F, 0x7F, 0x80, 0x80, 0x80,
@@ -271,18 +273,7 @@ uint8_t UART0_read(void);
 
 
 void tpm1_init_pwm(void)
-{/*
-	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
-	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
-	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-	PORTA->PCR[12] = PORT_PCR_MUX(2);
-	TPM1->SC |= TPM_SC_PS(7);
-	TPM1->SC |= TPM_SC_CMOD(2);
-	TPM1->MOD = 100;
-	TPM1->SC &= ~TPM_SC_CPWMS_MASK; 
-	TPM1->CONTROLS[0].CnSC |= (TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK);
-	TPM1->CONTROLS[0].CnV = 10;
-*/
+{
 
 	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
 	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
@@ -342,7 +333,7 @@ void UART0_Init(void)
 	
 	UART0->C2 &= ~(UART0_C2_TE_MASK | UART0_C2_RE_MASK );		
 	UART0->BDH = 0;
-	UART0->BDL =3;	//20 11	6
+	UART0->BDL =3;	//  41943040/(16*921600)=3
 	UART0->C4 &= ~UART0_C4_OSR_MASK;
 	UART0->C4 |= UART0_C4_OSR(15);	
 	UART0->C5 |= UART0_C5_BOTHEDGE_MASK;	
@@ -350,25 +341,12 @@ void UART0_Init(void)
 	UART0->C2 |= (UART0_C2_TE_MASK | UART0_C2_RE_MASK);		
 }
 
-uint8_t UART0_read(){
-
-	
-		if(!piosenka_FULL)
-		{
-			piosenka_FULL=1;
-		}
-
-	return temp;
-}
-
 void UART0_read2(){
-	//play=1;
 	while(!(UART0->S1 & UART0_S1_TDRE_MASK));
 	UART0->D = znak;
 	for (uint32_t k=0; k<dlugosc; k++){	
 			while(!(UART0->S1 & UART0_S1_RDRF_MASK)){}
 			temp2=UART0->D;
-			//temp2=UART0_read();
 			
 		if (k%4==3)
 		{
@@ -380,12 +358,6 @@ void UART0_read2(){
 				while(!(UART0->S1 & UART0_S1_TDRE_MASK));			UART0->D = temp4;
 				piosenka5[temp3]=temp4;
 				temp3++;	
-//			play=1;
-
-		//	TPM0->CONTROLS[2].CnV = temp4; 
-			//				TPM0->CONTROLS[0].CnSC |= TPM_CnSC_CHF_MASK; 
-
-			}
 		else if(k%4==2)
 		{
 			if (temp2=='a' || temp2=='b' || temp2=='c' || temp2=='d' || temp2 == 'e' || temp2=='f')
