@@ -23,24 +23,27 @@ int main (void)
 	
 uint8_t sliderTemp;
 
-	TSI_init();
-	SysTick_Config(1000000); 
+	TSI_init(); //inicjalizacja slidera
+	SysTick_Config(1000000); //ustawienie timera
 	
 
+	tpm1_init_pwm(); //inicjalizacja przerwania od wyswietlacza
+	TPM0_Init(); //inicjalizacja przerwania od glosnika
+	UART0_Init(); //inicjalizacja portu UART
+
+	spi_init(); //inicjalizacja protokolu SPI
+
+	//wyswietlenie poczatkowych bitmap
+	spi_write_data(title); 
+	wait();
+	wait();
+	wait();
+	wait();
 	
-	TPM0_Init();
-	UART0_Init();
-
-	spi_init();
-
-	spi_write_data(title);
-	wait();
-	wait();
-	wait();
-	wait();
 	spi_write_data(authors);
 	wait();
 	wait();
+	
 	spi_write_data(beginning);
 	wait();
 	wait();
@@ -50,47 +53,57 @@ uint8_t sliderTemp;
 	
 	spi_write_data(o1);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o2);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o3);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o4);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o5);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o6);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o7);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o8);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o9);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o10);
 	wait();
-		wait();
 	wait();
+	wait();
+	
 	spi_write_data(o12);
 	wait();
-		wait();
+	wait();
 	wait();
 	
 	while(1)
@@ -102,21 +115,16 @@ uint8_t sliderTemp;
 			UART0_read2();
 			sliderTemp = TSI_ReadSlider();
 				
-			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0])){
-					
-						TPM0_Play6(1);
-						points=points+1;
+			if ((slider_tab[tsi_nr][1]>= sliderTemp) && (sliderTemp> slider_tab[tsi_nr][0]))
+			{
+				TPM0_Play6(1);
+				points=points+1;
 			}
 			else{
-					wait();
-		//wait();
-	//wait();
-				//spi_write_data(table[nr++]);
-				//wait();
-			//wait();
-		//wait();
-	wait();
+				wait();
+				wait();
 			}
+			
 			tsi_nr++;
 				
 		}
@@ -215,29 +223,17 @@ uint8_t sliderTemp;
 		else if (points==20){
 		spi_write_data(p200);
 		}
-	/*	else if (points==21){
-		spi_write_data(p210);
-		}
-		else if (points==22){
-		spi_write_data(p220);
-		}
-		else if (points==23){
-		spi_write_data(p230);
-		}
-		else if (points==24){
-		spi_write_data(p240);
-		}
-		*/
+		
 		wait();
 		wait();
 		wait();
 		wait();
 		spi_write_data(ending);
-			wait();
 		wait();
 		wait();
 		wait();
-			wait();
+		wait();
+		wait();
 		wait();
 		wait();
 		wait();
@@ -246,12 +242,13 @@ uint8_t sliderTemp;
 	
 }
 }
+
 void SysTick_Handler(void) {
 	msTicks++;
 	newTick = 1;
 }
 
-void wait(void){
+void wait(void){ //funkcja realizujaca opoznienie
 	for(volatile int k=0; k<=2600; k++){
 		for(volatile int i=0; i<=500; i++){
 		}
