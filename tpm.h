@@ -6,14 +6,10 @@
 #define MCGIRCLK					0x03
 
 #include "frdm_bsp.h"
-//#include "song.h"
-
-
 
 void tpm1_init_pwm(void);
-
 void TPM0_Init(void);
 void TPM0_Play6(unsigned char z);
-void TPM0_Pause(void);
+
 
 #endif 
