@@ -1722,5 +1722,4 @@ static const unsigned char o25_pelne [] = {
 
 static const unsigned char *table[14]={o13pelne, o16pelne, o18pelne, o20_5_pelny, o23_pelne, o25_pelne, o13pelne, o16pelne, o181, o20_55, o233, o255, o28_pelne, o30_pelne };
 
-static const unsigned char slider_tab[8][2]={{66,100},{33,66},{66,100},{0,33},{33,66},{0,33}, {66,100},{33,66} /*{66,100},{33,66},{66,100},{0,33},{33,66},{0,33},{66,100},{33,66}, {66,100},{33,66},{66,100},{0,33},{33,66},{0,33},{66,100},{33,66}*/
-};
+static const unsigned char slider_tab[8][2]={{66,100},{33,66},{66,100},{0,33},{33,66},{0,33}, {66,100},{33,66}};
