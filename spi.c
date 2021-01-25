@@ -12,9 +12,9 @@ void delayMs(int n)
 }
 void spi_init(void)
 {
-	SIM->SCGC4 |= SIM_SCGC4_SPI0_MASK;
-	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+	SIM->SCGC4 |= SIM_SCGC4_SPI0_MASK; //enable clock for spi
+	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK; //enable clock for port A
+	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK; // enable clock for port B
 	
 	PORTB->PCR[0] = PORT_PCR_MUX(3); ///SCK
 	PORTA->PCR[7] = PORT_PCR_MUX(3); ///MOSI
